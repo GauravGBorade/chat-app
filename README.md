@@ -58,36 +58,5 @@ Start the backend server and then frontend
 ```bash
   npm run dev
 ```
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/GauravGBorade/chat-app.git
-```
-
-Go to the project directory
-
-```bash
-  cd chat-app
-```
-
-Install dependencies
-
-```bash
-  cd backend && npm install && cd ../frontend npm install
-```
-
-Add database string and JWT Secret in env file
-
-```bash
-  .env
-```
-
-Start the backend server and then frontend
-
-```bash
-  npm run dev 
 ```
 
