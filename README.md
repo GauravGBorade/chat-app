@@ -1,21 +1,4 @@
-
 # Chat-App
-
-A brief description of what this project does and who it's for
-
-This is a realtime chat application developed using MERN stack.
-This app has following functionalities - 
-
-* Users can signup or login on the app which creates their account
-* Users can create search other user's name in search filed and start a chat with them
-* Users can create a group chat to chat with multiple people at the same time
-## Demo
-
-
-# Chat-App
-
-A brief description of what this project does and who it's for
-
 This is a realtime chat application developed using MERN stack.
 
 ## Features
