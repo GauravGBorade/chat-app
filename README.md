@@ -58,5 +58,4 @@ Start the backend server and then frontend
 ```bash
   npm run dev
 ```
-```
 
