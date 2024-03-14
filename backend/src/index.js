@@ -38,7 +38,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
 });
 
-const port = process.env.PORT || 3000;
+const port = 3000;
 const chat = {
   key: "value",
 };
