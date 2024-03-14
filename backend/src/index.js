@@ -46,6 +46,8 @@ const httpServer = app.listen(
   port,
   console.log(`Server started on port ${port}`)
 );
+
+// Event listener for new socket connections
 const io = new Server(httpServer, {
   pingTimeout: 120000,
   cors: {
@@ -53,6 +55,7 @@ const io = new Server(httpServer, {
   },
 });
 
+// Event listener for 'join chat' event sent by client to join a chat room
 io.on("connection", (socket) => {
   socket.on("setup", (userData) => {
     socket.join(userData._id);
@@ -63,8 +66,11 @@ io.on("connection", (socket) => {
     socket.join(room);
   });
 
+  // Event listener for 'new message' event sent by client with a new message
   socket.on("new message", (newMessage) => {
     let chat = newMessage.chat;
+
+    // Skip if the user is the sender of the message
     if (!chat.users) return;
     chat.users.forEach((user) => {
       if (user._id === newMessage.sender._id) return;
@@ -72,6 +78,7 @@ io.on("connection", (socket) => {
     });
   });
 
+  // Clean up resources when socket disconnects
   socket.off("setup", () => {
     socket.leave(userData._id);
   });
