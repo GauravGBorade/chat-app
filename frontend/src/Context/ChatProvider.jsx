@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const ChatContext = createContext();
 
+//create context so that we have access to these state in whole app.
 const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [currentChat, setCurrentChat] = useState();

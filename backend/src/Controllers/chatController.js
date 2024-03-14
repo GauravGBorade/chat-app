@@ -1,11 +1,15 @@
 import Chat from "../models/chat.js";
 import User from "../models/user.js";
 
+//!Get All Chats
+//* Route - /api/chat/
 export const getAllChats = async (req, res) => {
   try {
+    //get user id from req. (set user in req while authenticating with token in middleware)
     if (!req.user._id) {
       return res.status(401).json({ message: "Unauthorized: Missing token" });
     }
+    //get logged in user's chat from db
     let allChats = await Chat.find({
       users: { $elemMatch: { $eq: req.user._id } },
     })
@@ -25,6 +29,8 @@ export const getAllChats = async (req, res) => {
   }
 };
 
+//!Create Chat
+//* Route - /api/chat/:id
 export const createChat = async (req, res) => {
   //get the user Id with which current logged in user wants to chat
   const receiverUserId = req.params.id.toString();
@@ -83,15 +89,20 @@ export const createChat = async (req, res) => {
   }
 };
 
+//!Create Group Chat
+//* Route - /api/chat/group
 export const createGroupChat = async (req, res) => {
   if (!req.body.users || !req.body.groupName) {
     return res.status(400).send({ message: "Please fill all fields" });
   }
 
+  //get users array of ids from frontend for creating group
   let users = JSON.parse(req.body.users);
 
+  //add logged in user to group chat users array
   users.push(req.user);
   try {
+    //create new group chat
     const newGroupChat = new Chat({
       chatName: req.body.groupName,
       users: users,

@@ -22,6 +22,7 @@ const SearchBar = () => {
   const searchRef = useRef(null);
 
   const navigate = useNavigate();
+  //close the results when user clicks outside search area
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -41,6 +42,7 @@ const SearchBar = () => {
     };
   }, []);
 
+  //get result i.e. users to show in search
   const { mutate: fetchUsers } = useMutation("getUsers", apiClient.getUsers, {
     onSuccess: (data) => {
       if (data) {
@@ -52,6 +54,7 @@ const SearchBar = () => {
     },
   });
 
+  //when clicked on searched user call fetch function to create chat
   const { mutate: createChat } = useMutation("getUsers", apiClient.createChat, {
     onSuccess: (data) => {
       if (data) {

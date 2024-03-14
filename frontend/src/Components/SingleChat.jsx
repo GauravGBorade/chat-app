@@ -17,6 +17,7 @@ const SingleChat = () => {
 
   const { user, currentChat } = useChatContext();
 
+  //create socket connection
   useEffect(() => {
     socket = io(API_BASE_URL);
     socket.emit("setup", user);
@@ -31,6 +32,7 @@ const SingleChat = () => {
     selectedChatCompare = currentChat;
   }, [currentChat]);
 
+  //look for incoming messages using socket
   useEffect(() => {
     socket.on("message received", (newMessage) => {
       if (
@@ -45,11 +47,13 @@ const SingleChat = () => {
     });
   });
 
+  //call fetch function to send the message
   const { mutate: sendMessageMutate } = useMutation(
     "sendMessage",
     apiClient.sendMessage,
     {
       onSuccess: (data) => {
+        //if successful then emit the message to backend
         socket.emit("new message", data);
         setMessages([...messages, data]);
       },
@@ -59,6 +63,7 @@ const SingleChat = () => {
     }
   );
 
+  //get all the messages for current chat
   useQuery(
     ["getAllMessages", currentChat?._id],
     () => apiClient.fetchMessages(currentChat._id, user.token),
@@ -78,6 +83,7 @@ const SingleChat = () => {
   const getSendersName = (loggedUser, users) => {
     return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;
   };
+  //on click of enter call sending message mutate
   const sendMessage = (e) => {
     if (e.key === "Enter" && newMessage) {
       sendMessageMutate({

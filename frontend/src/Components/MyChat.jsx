@@ -5,6 +5,8 @@ import * as apiClient from "../apiClient";
 import CreateGroup from "./CreateGroup";
 import { FaTimes } from "react-icons/fa";
 
+//shows all current active chats of logged in user
+
 const MyChat = () => {
   const [loggedUser, setLoggedUser] = useState();
   const [showCreateGropModal, setShowCreateGroupModal] = useState(false);
@@ -13,6 +15,7 @@ const MyChat = () => {
 
   const showGroupModalRef = useRef(null);
 
+  //call fetch function to get all chats of logged in user
   useQuery("getAllUserChats", () => apiClient.getAllUserChats(user.token), {
     onSuccess: (data) => {
       setAllUserChats(data);
@@ -23,6 +26,7 @@ const MyChat = () => {
     setLoggedUser(user);
   }, [user]);
 
+  //find our senders name depending upon logged in user's name
   const getSendersName = (loggedUser, users) => {
     return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;
   };

@@ -4,7 +4,6 @@ import { useChatContext } from "../Context/ChatProvider";
 import { toast } from "sonner";
 import * as apiClient from "../apiClient";
 import { useMutation } from "react-query";
-import axios from "axios";
 
 const CreateGroup = ({ setShowCreateGroupModal }) => {
   const [groupName, setGroupName] = useState();
@@ -13,6 +12,7 @@ const CreateGroup = ({ setShowCreateGroupModal }) => {
   const [searchResult, setSearchResult] = useState();
   const { user, allUserChats, setAllUserChats } = useChatContext();
 
+  //get the users to handle search when user searches for users to add in group
   const { mutate } = useMutation("getUsers", apiClient.getUsers, {
     onSuccess: (data) => {
       setSearchResult(data);
@@ -22,6 +22,7 @@ const CreateGroup = ({ setShowCreateGroupModal }) => {
     },
   });
 
+  //call fetch function to create group
   const { mutate: createGroupMutation } = useMutation(
     "createGroup",
     apiClient.createGroup,
@@ -38,6 +39,7 @@ const CreateGroup = ({ setShowCreateGroupModal }) => {
   );
 
   const handleSearch = (searchInput) => {
+    //when user enters in search input change local state of search
     setSearch(searchInput);
     if (!searchInput) {
       setSearchResult([]);
@@ -53,27 +55,12 @@ const CreateGroup = ({ setShowCreateGroupModal }) => {
       return;
     }
 
+    //on submit call mutate function
     createGroupMutation({ groupName, selectedGroupUsers, token: user.token });
-
-    // try {
-    //   const config = {
-    //     headers: {
-    //       Authorization: `Bearer ${user.token}`,
-    //     },
-    //   };
-    //   const { data } = await axios.post(
-    //     "http://localhost:3000/api/chat/group",
-    //     {
-    //       groupName: groupName,
-    //       users: JSON.stringify(selectedGroupUsers.map((user) => user._id)),
-    //     },
-    //     config
-    //   );
-
-    // } catch (error) {}
   };
 
   const handleAddUser = (userToAddToGroup) => {
+    //update local state when user clicks on user name to add user to group
     if (selectedGroupUsers.includes(userToAddToGroup)) {
       toast.error("already added");
       return;

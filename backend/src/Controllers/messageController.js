@@ -2,6 +2,8 @@ import Chat from "../models/chat.js";
 import Message from "../models/message.js";
 import User from "../models/user.js";
 
+//! adding message to db
+//* Route - /api/message
 export const sendMessage = async (req, res) => {
   const { content, chatId } = req.body;
   if (!content || !chatId) {
@@ -9,6 +11,7 @@ export const sendMessage = async (req, res) => {
     return res.send(400).json({ message: "Invalid Data" });
   }
 
+  //crete new message object
   let newMessage = {
     sender: req.user._id,
     content: content,
@@ -16,6 +19,7 @@ export const sendMessage = async (req, res) => {
   };
 
   try {
+    //add creted message object to db and populate all required fields
     let message = await Message.create(newMessage);
 
     message = await message.populate("sender", "name");
@@ -25,6 +29,7 @@ export const sendMessage = async (req, res) => {
       select: "name email",
     });
 
+    //populate lastMesasge field in db
     await Chat.findByIdAndUpdate(req.body.chatId, { lastMessage: message });
 
     res.json(message);
@@ -34,7 +39,11 @@ export const sendMessage = async (req, res) => {
   }
 };
 
+//! getting messages from db
+//* Route - /api/message/:chatId
+
 export const getAllMessages = async (req, res) => {
+  //get chat id from frontend in url
   const chatId = req.params.chatId;
   if (!chatId) {
     console.log("Invalid data passed");
@@ -42,6 +51,7 @@ export const getAllMessages = async (req, res) => {
   }
 
   try {
+    //find messages in that chat and return
     const allMessages = await Message.find({ chat: chatId })
       .populate("sender", "name email")
       .populate("chat");
